@@ -1,0 +1,33 @@
+{% extends "layout.html"%}
+  
+{% block body %}
+
+<form>
+  <fieldset>
+    <legend>Nuevo Post</legend>
+    <div class="row">
+    </div>
+    <div>
+      <label for="inputTitle" class="form-label mt-4">Titulo</label>
+      <input type="text" class="form-control" id="inputTitle" placeholder="">
+    </div>
+      <div>
+      <label for="inputSubtitle" class="form-label mt-4">Subtitulo</label>
+      <input type="text" class="form-control" id="InputSubtitle" placeholder="">
+  
+    </div>
+ 
+    <div>
+      <label for="exampleTextarea" class="form-label mt-4">Contenido</label>
+      <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+    </div>
+    <div>
+      <label for="formFile" class="form-label mt-4">Subir Imagen</label>
+      <input class="form-control" type="file" id="formFile">
+      <div class="mt-4 float-end">
+        <button type="button" class="btn btn-primary btn-lg disabled">Cancelar</button>
+        <button type="button" class="btn btn-primary btn-lg disabled">Publicar</button>
+      </div>      
+    </div>
+
+{% endblock %}
