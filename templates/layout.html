@@ -18,18 +18,20 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarColor01">
       <ul class="navbar-nav me-auto">
+        {% if loggin %}
         <li class="nav-item">
-          <a class="nav-link active" href="{{ url_for('add_post') }}" >Agregar
-            
+          <a class="nav-link active" href="{{ url_for('add_post') }}" >Agregar         
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
+        {% endif %}
+        {% if not loggin %}
         <li class="nav-item">
-          <a class="nav-link active" href="{{ url_for('login') }}" >Ingresar
-            
+          <a class="nav-link active" href="{{ url_for('login') }}" >Ingresar            
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
+        {% endif %}
 
       </form>
     </div>

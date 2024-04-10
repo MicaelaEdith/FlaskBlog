@@ -19,9 +19,9 @@ class DataAccess:
         print('guardado')
         self.disconnect()
 
-    def get_user(self, username):
+    def get_user(self, username, password):
         self.connect()
-        self.cursor.execute("SELECT * FROM USERS WHERE username=?", (username,))
+        self.cursor.execute("SELECT * FROM USERS WHERE username=? and password=?", (username, password))
         user = self.cursor.fetchone()
         self.disconnect()
         return user
