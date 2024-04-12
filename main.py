@@ -2,17 +2,19 @@ from flask import Flask, render_template, request, redirect
 from data_access import DataAccess
 from post import Post
 
+
 app = Flask(__name__)
 
-login_ok=False
 id=1
 data= DataAccess()
+login_ok=False
 
 post_list = []
 post_list_final = []
 
 @app.route("/")
 def index():
+	global login_ok
 	posts_list_db = data.get_posts()
 	post_list.clear()
 	for post in posts_list_db:
@@ -28,23 +30,31 @@ def index():
 	
 @app.route("/addPost")
 def add_post():
-	if not login_ok:
+	global login_ok
+	if login_ok==False:
 		return redirect("/login")
-	return render_template("add_post.html",  login = login_ok)	
-
+	else:
+		return render_template("add_post.html",login=login_ok)	
+	
 @app.route("/login")
 def login():
-	if login_ok:
+	global login_ok
+	if login_ok==True:
 		return redirect("/")
-	return render_template("login.html")
-	
+	else:
+		return render_template("login.html",login=login_ok)
+
 @app.route("/login_", methods=["POST"])
 def login_():
+	global login_ok
 	user=request.form.get("user")
 	password=request.form.get("password")
-	data.get_user(user,password)
-	login_ok=True
-	return redirect("/")
+	userlog=data.get_user(user,password)
+	if userlog=="":
+		return redirect("/login" )
+	else:
+		login_ok=True
+		return redirect("/")
 	
 @app.route("/add_new_post", methods=["POST"])
 def add_new_post():
@@ -56,5 +66,14 @@ def add_new_post():
 		data.add_post(id_user, post,url_img,title,subtitle)
 		return redirect("/")
 
+@app.route("/log_out")	
+def log_out():
+	global login_ok
+	login_ok=False
+	return redirect("/")
+
 if __name__=="__main__":
 	app.run(port=7000,debug=True)
+	
+	
+	
