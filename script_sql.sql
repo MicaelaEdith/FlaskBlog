@@ -1,0 +1,21 @@
+CREATE DATABASE IF NOT EXISTS blog_db;
+USE blog_db;
+
+CREATE TABLE IF NOT EXISTS USERS (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    admin BOOLEAN NOT NULL DEFAULT 0
+);
+
+INSERT INTO USERS (username, password, admin) VALUES ('test', 'test', 1);
+
+CREATE TABLE IF NOT EXISTS POST (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_user INT NOT NULL,
+    post TEXT NOT NULL,
+    url_img VARCHAR(255),
+    title VARCHAR(255) NOT NULL,
+    subtitle VARCHAR(255) NULL,
+    FOREIGN KEY (id_user) REFERENCES USERS(id)
+);
