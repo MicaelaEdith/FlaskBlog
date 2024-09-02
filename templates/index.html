@@ -13,9 +13,7 @@
     {% endif %}
   </div>
   
-  {% if post.url_img.startswith('http') %}
-  <img src="{{ post.url_img }}" class="img-fluid" alt="Imagen del Post">
-  {% else %}
+  {% if post.url_img %}
     <img src="{{ url_for('static', filename=post.url_img) }}" class="img-fluid" alt="Imagen del Post">
   {% endif %}
 
