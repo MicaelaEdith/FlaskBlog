@@ -35,7 +35,13 @@ class DataAccess:
             (id_user, post, url_img, title, subtitle)
         )
         self.connection.commit()
-        print("Post agregado")
+        post_id = self.cursor.lastrowid
+        
+        self.cursor.execute(
+            "INSERT INTO user_post (user_id, post_id) VALUES (%s, %s)", 
+            (id_user, post_id)
+        )
+        self.connection.commit()
         self.disconnect()
 
     def get_posts(self):
@@ -77,3 +83,10 @@ class DataAccess:
         post = self.cursor.fetchone()
         self.disconnect()
         return post
+    
+    def get_user_post(self, user_id):
+        self.connect()
+        self.cursor.execute("SELECT post_id FROM USER_POST WHERE user_id=%s", (user_id,))
+        posts = self.cursor.fetchall()
+        self.disconnect()
+        return posts

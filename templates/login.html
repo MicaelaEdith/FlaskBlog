@@ -1,7 +1,7 @@
 {% extends "layout.html"%}
   
 {% block body %}
-<form action=" {{ url_for('login_') }} " method="post">
+<form action=" {{ url_for('login_') }} " method="post" style="margin-top: 3vh ;margin-bottom: 25vh;">
     <div class="row">
     </div>
     <div>  
@@ -12,7 +12,7 @@
       <label for="password" class="form-label mt-4">Contraseña</label>
       <input type="password" class="form-control mb-2" id="password" name="password" placeholder="" required>
       <a href="{{ url_for('new_user') }}" class="mt-4" style="margin-right: 12px;">Crear cuenta</a>
-      <button type="submit" class="btn btn-primary btn-lg mt-1 float-end">Ingresar</button>
+      <button type="submit" class="btn btn-primary btn-lg mt-1 mb-3 float-end">Ingresar</button>
     </div>
 </form>
 {% endblock %}

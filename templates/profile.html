@@ -1,12 +1,13 @@
-{% extends "layout.html" %}
+{% extends "layout.html"%}
   
 {% block body %}
-  
-{% for post in posts %}
+<br>
+<h2>Mis posts</h2>
+<div style="display: flex; flex-direction: row; flex-wrap: wrap; margin-bottom: 5vh;">
+{% for post in posts_list %}
 
-<div class="card mb-3 m-4 w-60">
+<div class="card mb-3 m-4 w-60 col-3">
   <h3 class="card-header" style="color:#495057">{{ post.title }}</h3>
-  
   <div class="card-body">
     {% if post.subtitle %}
       <h5 class="card-title">{{ post.subtitle }}</h5>
@@ -28,7 +29,6 @@
   </div>
 </div>
 
-
 {% endfor %}
-
+</div>
 {% endblock %}

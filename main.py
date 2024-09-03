@@ -52,6 +52,23 @@ def add_post():
     else:
         return render_template("add_post.html", login=login_ok)
     
+@app.route("/profile")
+def profile():
+    global login_ok
+    if not login_ok:
+        return redirect("/login")
+    else:
+        posts = data.get_user_post(current_user_id)
+        posts_list = []
+
+        for post in posts:
+            print(post)
+            post_data = data.get_post_by_id(post[0])
+            p = Post(post_data[0], post_data[1], post_data[2], post_data[3], post_data[4], post_data[5])
+            posts_list.append(p)
+            posts_list.reverse()
+        return render_template("profile.html", login=login_ok, posts_list = posts_list)
+    
 
 @app.route("/add_new_post", methods=["POST"])
 def add_new_post():

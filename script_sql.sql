@@ -19,3 +19,12 @@ CREATE TABLE IF NOT EXISTS POST (
     subtitle VARCHAR(255) NULL,
     FOREIGN KEY (id_user) REFERENCES USERS(id)
 );
+
+CREATE TABLE user_post (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USERS(id),
+    FOREIGN KEY (post_id) REFERENCES POST(id)
+);
+
