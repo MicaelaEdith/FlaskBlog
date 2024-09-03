@@ -1,0 +1,15 @@
+{% extends "layout.html"%}
+  
+{% block body %}
+
+<div class="container text-center">
+    <div class="row align-items-start">
+          <h1 class="mb-4">{{ post.title }}</h1>
+          <h4 class = "mb-4">{{ post.subtitle }}</h4>
+          <img src="{{ url_for('static', filename=post.url_img) }}" class="img-fluid" style="margin-top : 2vh; margin-bottom : 4vh" alt="Imagen del Post">
+          <p style="margin-top : 2vh; margin-bottom : 4vh">{{ post.body }}</p>
+    </div>
+    <a href="{{ url_for('index') }}" class="float-start" style="margin-top : 3vh; margin-bottom : 6vh">volver</a>
+  </div>
+
+{% endblock %}

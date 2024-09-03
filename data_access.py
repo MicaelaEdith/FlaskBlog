@@ -45,11 +45,11 @@ class DataAccess:
         self.disconnect()
         return all_posts
     
-    def add_user(self, username, password):
+    def add_user(self, username, password, email):
         self.connect()
         self.cursor.execute(
-            "INSERT INTO USERS (username, password, admin) VALUES (%s, %s, %s)", 
-            (username, password, 0)
+            "INSERT INTO USERS (username, password, email, admin) VALUES (%s, %s, %s, %s)", 
+            (username, password, email, 0)
         )
         self.connection.commit()
         self.disconnect()
@@ -63,3 +63,17 @@ class DataAccess:
         user = self.cursor.fetchone()
         self.disconnect()
         return user
+
+    def user_exists(self, username):
+        self.connect()
+        self.cursor.execute("SELECT 1 FROM USERS WHERE username=%s", (username,))
+        user = self.cursor.fetchone()
+        self.disconnect()
+        return user is not None
+    
+    def get_post_by_id(self, post_id):
+        self.connect()
+        self.cursor.execute("SELECT * FROM POST WHERE id=%s", (post_id,))
+        post = self.cursor.fetchone()
+        self.disconnect()
+        return post

@@ -28,20 +28,52 @@ def index():
         id_user = post[1]
         post_body = post[2]
         url_img = post[3]
-        print(url_img)
         title = post[4]
         subtitle = post[5]
         aux = Post(id, id_user, post_body, url_img, title, subtitle)
         post_list.append(aux)
-    return render_template("index.html", posts=post_list, login=login_ok)
+    return render_template("index.html", posts=post_list, login=login_ok)    
 
-@app.route("/addPost")
+@app.route("/post/<int:post_id>")
+def view_post(post_id):
+    post_data = data.get_post_by_id(post_id)
+
+    if post_data is None:
+        return redirect("/")
+
+    post = Post(post_data[0], post_data[1], post_data[2], post_data[3], post_data[4], post_data[5])
+    return render_template("post.html", post=post)
+
+@app.route("/add_Post")
 def add_post():
     global login_ok
     if not login_ok:
         return redirect("/login")
     else:
         return render_template("add_post.html", login=login_ok)
+    
+
+@app.route("/add_new_post", methods=["POST"])
+def add_new_post():
+    global current_user_id
+    if current_user_id is None:
+        return redirect("/login")
+
+    id_user = current_user_id
+    title = request.form.get("title")
+    post = request.form.get("textarea")
+    file = request.files.get("formFile")
+    subtitle = request.form.get("subtitle", None) 
+
+    filename = secure_filename(file.filename)
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    url_img = os.path.join('img', filename)
+    url_img = url_img.replace('\\', '/')
+    if (title and post and file) and(file and allowed_file(file.filename)):
+        data.add_post(id_user, post, url_img, title, subtitle)
+        return redirect("/")
+    else:
+        return render_template("add_Post.html")
 
 @app.route("/login")
 def login():
@@ -65,45 +97,34 @@ def login_():
         return redirect("/")
 
     
-@app.route("/new_user")
+@app.route("/new_user", methods=["GET"])
 def new_user():
     global login_ok
     if login_ok:
         return redirect("/")
     else:
-        print('render de new_user')
         return render_template("new_user.html", login=login_ok)
-
-@app.route("/new_user_")
+    
+@app.route("/new_user_", methods=["POST"])
 def new_user_():
     global login_ok, current_user_id
-    if not login_ok:
-        return redirect("/new_user_")
-    else:
+    
+    if login_ok:
         return redirect("/")
+    
+    username = request.form.get("user")
+    password1 = request.form.get("password1")
+    password2 = request.form.get("password2")
+    email = request.form.get("email")
 
+    if password1 != password2:
+        return render_template("new_user.html", login=login_ok, username=username, email=email, error="Las contraseñas no coinciden.")
 
-@app.route("/add_new_post")
-def add_new_post():
-    global current_user_id
-    if current_user_id is None:
-        return redirect("/login")
+    if data.user_exists(username):
+            return render_template("new_user.html", login=login_ok, username=username, email=email, error="El nombre de usuario ya existe. Por favor, elija uno diferente.")
 
-    id_user = current_user_id
-    title = request.form.get("title")
-    post = request.form.get("textarea")
-    file = request.files.get("formFile")
-    subtitle = request.form.get("subtitle", None) 
-
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    url_img = os.path.join('img', filename)
-    url_img = url_img.replace('\\', '/')
-    if (title and post and file) and(file and allowed_file(file.filename)):
-        data.add_post(id_user, post, url_img, title, subtitle)
-        return redirect("/")
-    else:
-        return redirect("/addPost")
+    data.add_user(username, password1, email)
+    return redirect("/login")
 
 @app.route("/log_out")
 def log_out():

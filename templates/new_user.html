@@ -2,23 +2,27 @@
   
 {% block body %}
 
-<form>
+{% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="POST" action="/new_user_">
     <fieldset>
       <div>
         <label for="exampleInputEmail1" class="form-label mt-4">Email</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ingrese email">
+        <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Ingrese email" value="{{ email or '' }}" required>
       </div>
       <div>
         <label for="user" class="form-label mt-4">Nombre de Usuario</label>
-        <input type="password" class="form-control" id="user" placeholder="Ingrese Nombre" autocomplete="off">
+        <input type="text" class="form-control" id="user" name="user" placeholder="Ingrese Nombre" autocomplete="off" value="{{ username or '' }}" required>
       </div>
       <div>
         <label for="inputPassword1" class="form-label mt-4">Contraseña</label>
-        <input type="password" class="form-control" id="inputPassword1" placeholder="Contraseña" autocomplete="off">
+        <input type="password" class="form-control" id="inputPassword1" name="password1" placeholder="Contraseña" autocomplete="off" required>
       </div>
       <div>
         <label for="inputPassword2" class="form-label mt-4">Repetir Contraseña</label>
-        <input type="password" class="form-control" id="inputPassword2" placeholder="Contraseña" autocomplete="off">
+        <input type="password" class="form-control" id="inputPassword2" name="password2" placeholder="Contraseña" autocomplete="off" required>
       </div>
       <button type="submit" class="btn btn-primary mt-4">Aceptar</button>
   </form>
