@@ -31,7 +31,7 @@ class DataAccess:
     def add_post(self, id_user, post, url_img, title, subtitle):
         self.connect()
         self.cursor.execute(
-            "INSERT INTO POST(id_user, post, url_img, title, subtitle) VALUES (%s, %s, %s, %s, %s)", 
+            "INSERT INTO POST(id_user, post, url_img, title, subtitle, activo) VALUES (%s, %s, %s, %s, %s, 1)", 
             (id_user, post, url_img, title, subtitle)
         )
         self.connection.commit()
@@ -90,3 +90,10 @@ class DataAccess:
         posts = self.cursor.fetchall()
         self.disconnect()
         return posts
+    
+    def del_post(self, id):
+        self.connect()
+        self.cursor.execute("UPDATE post SET activo = 0 WHERE id=%s", (id,))
+        self.connection.commit()
+        print("UPDATE post SET activo = 0 WHERE id=%s", (id,))
+        self.disconnect()

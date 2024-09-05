@@ -25,24 +25,32 @@ def index():
     post_list.clear()
     for post in posts_list_db:
         id = post[0]
+
         id_user = post[1]
         post_body = post[2]
         url_img = post[3]
         title = post[4]
         subtitle = post[5]
-        aux = Post(id, id_user, post_body, url_img, title, subtitle)
-        post_list.append(aux)
+        on = post[6]
+        aux = Post(id, id_user, post_body, url_img, title, subtitle, on)
+        if aux.on:
+            post_list.append(aux)
     return render_template("index.html", posts=post_list, login=login_ok)    
 
 @app.route("/post/<int:post_id>")
 def view_post(post_id):
     post_data = data.get_post_by_id(post_id)
+    user_post = False
 
     if post_data is None:
         return redirect("/")
 
-    post = Post(post_data[0], post_data[1], post_data[2], post_data[3], post_data[4], post_data[5])
-    return render_template("post.html", post=post)
+    post = Post(post_data[0], post_data[1], post_data[2], post_data[3], post_data[4], post_data[5], post_data[6])
+
+    if post.id_user == current_user_id:
+        user_post = True
+
+    return render_template("post.html", post=post, login = login_ok, user_post = user_post)
 
 @app.route("/add_Post")
 def add_post():
@@ -62,11 +70,11 @@ def profile():
         posts_list = []
 
         for post in posts:
-            print(post)
             post_data = data.get_post_by_id(post[0])
-            p = Post(post_data[0], post_data[1], post_data[2], post_data[3], post_data[4], post_data[5])
-            posts_list.append(p)
-            posts_list.reverse()
+            p = Post(post_data[0], post_data[1], post_data[2], post_data[3], post_data[4], post_data[5], post_data[6])
+            if post_data[6] == True:
+                posts_list.append(p)
+                posts_list.reverse()
         return render_template("profile.html", login=login_ok, posts_list = posts_list)
     
 
@@ -149,6 +157,15 @@ def log_out():
     login_ok = False
     current_user_id = None
     return redirect("/")
+
+    
+@app.route("/delete")
+def delete():
+    post_id = request.args.get('post_id')
+    print(post_id)
+    data.del_post(post_id)
+    return redirect("/")
+
 
 def allowed_file(filename):
     return '.' in filename and \

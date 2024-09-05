@@ -11,7 +11,14 @@
           <p style="margin-top : 2vh; margin-bottom : 4vh">{{ post.body }}</p>
           <hr>
     </div>
-    <a href="{{ url_for('index') }}" class="float-start" style="margin-top : 3vh; margin-bottom : 6vh">volver</a>
+    <div>
+      <a href="{{ url_for('index') }}" class="float-start" style="margin-top : 3vh; margin-bottom : 6vh">volver</a>
+        {% if user_post %}
+        <a href="{{ url_for('delete', post_id=post.id )}}" style="text-decoration: none;">
+          <button type="button" class="btn btn-outline-danger float-end m-3">Eliminar</button>  
+        </a>
+        {% endif %}
+    </div>
   </div>
 
 {% endblock %}
