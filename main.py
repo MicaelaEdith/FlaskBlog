@@ -74,7 +74,7 @@ def profile():
             p = Post(post_data[0], post_data[1], post_data[2], post_data[3], post_data[4], post_data[5], post_data[6])
             if post_data[6] == True:
                 posts_list.append(p)
-                posts_list.reverse()
+        posts_list.reverse()
         return render_template("profile.html", login=login_ok, posts_list = posts_list)
     
 
@@ -144,6 +144,9 @@ def new_user_():
 
     if password1 != password2:
         return render_template("new_user.html", login=login_ok, username=username, email=email, error="Las contraseñas no coinciden.")
+    else:
+        if len(password1) < 4:
+            return render_template("new_user.html", login=login_ok, username=username, email=email, error="La contraseña debe tener más de 4 caracteres.")
 
     if data.user_exists(username):
             return render_template("new_user.html", login=login_ok, username=username, email=email, error="El nombre de usuario ya existe. Por favor, elija uno diferente.")
